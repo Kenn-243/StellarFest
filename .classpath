@@ -5,13 +5,18 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX-23">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/ken/Documents/Programming/Java/Dependency/mysql-connector-java-8.0.24.jar">
+	<classpathentry kind="lib" path="C:/Users/alves/Downloads/Apps/mysql-connector-java-8.0.24.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>

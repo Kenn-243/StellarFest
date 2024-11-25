@@ -6,4 +6,16 @@ public class Invitation {
 	private String user_id;
 	private String invitation_status;
 	private String invitation_role;
+	
+	public void sendInvitation(String email) {
+		
+	}
+	
+	public void acceptInvitation(String eventID) {
+		
+	}
+	
+	public void getInvitations(String email) {
+		
+	}
 }

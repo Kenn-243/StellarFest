@@ -7,6 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import main.Main;
 
 public class LoginPage {
@@ -20,6 +21,9 @@ public class LoginPage {
 	HBox passwordPane;
 	Label passwordTitle;
 	PasswordField passwordField;
+	
+	HBox errorPane;
+	Label errorLabel;
 	
 	HBox toRegisterPane;
 	Label toRegisterTitle;
@@ -40,6 +44,10 @@ public class LoginPage {
 		passwordTitle.setPrefWidth(100);
 		passwordField = new PasswordField();
 		
+		errorPane = new HBox();
+		errorLabel = new Label();
+		errorLabel.setTextFill(Color.RED);
+		
 		toRegisterPane = new HBox();
 		toRegisterTitle = new Label("Don't have an account? ");
 		toRegisterLink = new Hyperlink("Register");
@@ -49,10 +57,20 @@ public class LoginPage {
 		
 		emailPane.getChildren().addAll(emailTitle, emailField);
 		passwordPane.getChildren().addAll(passwordTitle, passwordField);
+		errorPane.getChildren().addAll(errorLabel);
 		toRegisterPane.getChildren().addAll(toRegisterTitle, toRegisterLink);
 		
-		loginContainer.getChildren().addAll(emailPane, passwordPane, toRegisterPane, loginButton);
+		loginContainer.getChildren().addAll(emailPane, passwordPane, errorPane, toRegisterPane, loginButton);
 		loginContainer.setSpacing(10);
+		
+		loginButton.setOnAction(e -> {
+			String response = controller.UserController.login(emailField.getText(), passwordField.getText());
+			if(response.equals("Success")) {
+				System.out.println("To Home");
+			}else {
+				errorLabel.setText(response);
+			}
+		});
 	}
 	
 	public VBox getUI() {

@@ -8,6 +8,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import main.Main;
 
 public class RegisterPage {
@@ -22,13 +23,16 @@ public class RegisterPage {
 	Label usernameTitle;
 	TextField usernameField;
 	
-	HBox passPane;
-	Label passTitle;
-	PasswordField passField;
+	HBox passwordPane;
+	Label passwordTitle;
+	PasswordField passwordField;
 	
 	HBox rolePane;
 	Label roleTitle;
 	ComboBox<String> roleBox;
+	
+	HBox errorPane;
+	Label errorLabel;
 	
 	HBox toLoginPane;
 	Label toLoginTitle;
@@ -49,16 +53,20 @@ public class RegisterPage {
 		usernameTitle.setPrefWidth(100);
 		usernameField = new TextField();
 		
-		passPane = new HBox();
-		passTitle = new Label("Password");
-		passTitle.setPrefWidth(100);
-		passField = new PasswordField();
+		passwordPane = new HBox();
+		passwordTitle = new Label("Password");
+		passwordTitle.setPrefWidth(100);
+		passwordField = new PasswordField();
 		
 		rolePane = new HBox();
 		roleTitle = new Label("Nationality");
 		roleTitle.setPrefWidth(100);
 		roleBox = new ComboBox<String>();
 		roleBox.getItems().addAll("Guest", "Event Organizer", "Vendor", "Admin");
+		
+		errorPane = new HBox();
+		errorLabel = new Label();
+		errorLabel.setTextFill(Color.RED);
 		
 		toLoginPane = new HBox();
 		toLoginTitle = new Label("Already have an account? ");
@@ -69,12 +77,22 @@ public class RegisterPage {
 		
 		emailPane.getChildren().addAll(emailTitle, emailField);
 		usernamePane.getChildren().addAll(usernameTitle, usernameField);
-		passPane.getChildren().addAll(passTitle, passField);
+		passwordPane.getChildren().addAll(passwordTitle, passwordField);
 		rolePane.getChildren().addAll(roleTitle, roleBox);
+		errorPane.getChildren().addAll(errorLabel);
 		toLoginPane.getChildren().addAll(toLoginTitle, toLoginLink);
 		
-		registerContainer.getChildren().addAll(emailPane, usernamePane, passPane, rolePane, toLoginPane,registerButton);
+		registerContainer.getChildren().addAll(emailPane, usernamePane, passwordPane, rolePane, errorPane, toLoginPane,registerButton);
 		registerContainer.setSpacing(10);
+		
+		registerButton.setOnAction(e -> {
+			String response = controller.UserController.register(emailField.getText(), usernameField.getText(), passwordField.getText(), roleBox.getValue());
+			if(response.equals("Success")) {
+				main.showLoginPage();
+			}else {
+				errorLabel.setText(response);
+			}
+		});
 	}
 	
 	public VBox getUI() {

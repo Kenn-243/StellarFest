@@ -1,9 +1,6 @@
 package controller;
 
 public class AdminController {
-<<<<<<< HEAD
-	
-=======
 	public void viewAllEvents() {
 		
 	}
@@ -35,5 +32,4 @@ public class AdminController {
 	public void getVendorsByTransactionID(String eventID) {
 		
 	}
->>>>>>> refs/remotes/origin/main
 }

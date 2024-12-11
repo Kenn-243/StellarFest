@@ -15,6 +15,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
 
@@ -35,6 +36,11 @@ public class Main extends Application{
         RegisterPage registerPage = new RegisterPage(this);
         primaryStage.setScene(new Scene(registerPage.getUI(), 350, 250));
     }
+	
+	public void showHomePage() {
+		HomePage homePage = new HomePage(this);
+		primaryStage.setScene(new Scene(homePage.getUI(), 350, 250));
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

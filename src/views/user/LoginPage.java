@@ -66,7 +66,7 @@ public class LoginPage {
 		loginButton.setOnAction(e -> {
 			String response = controller.UserController.login(emailField.getText(), passwordField.getText());
 			if(response.equals("Success")) {
-				main.showHomePage();
+				System.out.println("To Home");
 			}else {
 				errorLabel.setText(response);
 			}

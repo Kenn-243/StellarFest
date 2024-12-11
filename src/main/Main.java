@@ -2,8 +2,19 @@ package main;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
 
@@ -25,11 +36,6 @@ public class Main extends Application{
         RegisterPage registerPage = new RegisterPage(this);
         primaryStage.setScene(new Scene(registerPage.getUI(), 350, 250));
     }
-	
-	public void showHomePage() {
-		HomePage homePage = new HomePage(this);
-		primaryStage.setScene(new Scene(homePage.getUI(), 350, 250));
-	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {

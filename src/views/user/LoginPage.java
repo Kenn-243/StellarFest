@@ -1,5 +1,7 @@
 package views.user;
 
+import controller.ViewController;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -8,52 +10,40 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import main.Main;
+import models.User;
 
 public class LoginPage {
+	ViewController viewController;
 	
-	VBox loginContainer;
+	public LoginPage() {
+		this.viewController = ViewController.getInstance();
+	}
 	
-	HBox emailPane;
-	Label emailTitle;
-	TextField emailField;
-	
-	HBox passwordPane;
-	Label passwordTitle;
-	PasswordField passwordField;
-	
-	HBox errorPane;
-	Label errorLabel;
-	
-	HBox toRegisterPane;
-	Label toRegisterTitle;
-	Hyperlink toRegisterLink;
-	
-	Button loginButton;
-	
-	public LoginPage(Main main) {
-		loginContainer = new VBox();
+	public Scene getUI() {
+		VBox loginContainer = new VBox();
 		
-		emailPane = new HBox();
-		emailTitle = new Label("Email");
+		HBox emailPane = new HBox();
+		Label emailTitle = new Label("Email");
 		emailTitle.setPrefWidth(100);
-		emailField = new TextField();
+		TextField emailField = new TextField();
 		
-		passwordPane = new HBox();
-		passwordTitle = new Label("Password");
+		HBox passwordPane = new HBox();
+		Label passwordTitle = new Label("Password");
 		passwordTitle.setPrefWidth(100);
-		passwordField = new PasswordField();
+		PasswordField passwordField = new PasswordField();
 		
-		errorPane = new HBox();
-		errorLabel = new Label();
+		HBox errorPane = new HBox();
+		Label errorLabel = new Label();
 		errorLabel.setTextFill(Color.RED);
 		
-		toRegisterPane = new HBox();
-		toRegisterTitle = new Label("Don't have an account? ");
-		toRegisterLink = new Hyperlink("Register");
-		toRegisterLink.setOnAction(e -> main.showRegisterPage());
+		HBox toRegisterPane = new HBox();
+		Label toRegisterTitle = new Label("Don't have an account? ");
+		Hyperlink toRegisterLink = new Hyperlink("Register");
+		toRegisterLink.setOnAction(e -> {
+			viewController.showRegisterPage();
+		});
 		
-		loginButton = new Button("Login");
+		Button loginButton = new Button("Login");
 		
 		emailPane.getChildren().addAll(emailTitle, emailField);
 		passwordPane.getChildren().addAll(passwordTitle, passwordField);
@@ -64,16 +54,15 @@ public class LoginPage {
 		loginContainer.setSpacing(10);
 		
 		loginButton.setOnAction(e -> {
+			// kayaknya ga perlu static buat function loginnya
 			String response = controller.UserController.login(emailField.getText(), passwordField.getText());
 			if(response.equals("Success")) {
-				System.out.println("To Home");
+				viewController.showHomePage();
 			}else {
 				errorLabel.setText(response);
 			}
 		});
-	}
-	
-	public VBox getUI() {
-		return loginContainer;
+		
+		return new Scene(loginContainer, 350, 250);
 	}
 }

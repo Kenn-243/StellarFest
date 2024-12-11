@@ -1,5 +1,7 @@
 package views.user;
 
+import controller.ViewController;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -9,71 +11,50 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import main.Main;
 
 public class RegisterPage {
+	ViewController viewController;
+	
+	public RegisterPage() {
+		this.viewController = ViewController.getInstance();
+	}
 
-	VBox registerContainer;
-	
-	HBox emailPane;
-	Label emailTitle;
-	TextField emailField;
-	
-	HBox usernamePane;
-	Label usernameTitle;
-	TextField usernameField;
-	
-	HBox passwordPane;
-	Label passwordTitle;
-	PasswordField passwordField;
-	
-	HBox rolePane;
-	Label roleTitle;
-	ComboBox<String> roleBox;
-	
-	HBox errorPane;
-	Label errorLabel;
-	
-	HBox toLoginPane;
-	Label toLoginTitle;
-	Hyperlink toLoginLink;
-	
-	Button registerButton;
-	
-	public RegisterPage(Main main) {
-		registerContainer = new VBox();
+	public Scene getUI() {
+		VBox registerContainer = new VBox();
 		
-		emailPane = new HBox();
-		emailTitle = new Label("Email");
+		HBox emailPane = new HBox();
+		Label emailTitle = new Label("Email");
 		emailTitle.setPrefWidth(100);
-		emailField = new TextField();
+		TextField emailField = new TextField();
 		
-		usernamePane = new HBox();
-		usernameTitle = new Label("Username");
+		HBox usernamePane = new HBox();
+		Label usernameTitle = new Label("Username");
 		usernameTitle.setPrefWidth(100);
-		usernameField = new TextField();
+		TextField usernameField = new TextField();
 		
-		passwordPane = new HBox();
-		passwordTitle = new Label("Password");
-		passwordTitle.setPrefWidth(100);
-		passwordField = new PasswordField();
+		HBox passwordPane = new HBox();
+		Label passwordTitle = new Label("Password");
+		passwordTitle.setPrefWidth(100);;
+		PasswordField passwordField = new PasswordField();
 		
-		rolePane = new HBox();
-		roleTitle = new Label("Nationality");
+		HBox rolePane = new HBox();
+		Label roleTitle = new Label("Nationality");
 		roleTitle.setPrefWidth(100);
-		roleBox = new ComboBox<String>();
+		ComboBox<String> roleBox = new ComboBox<String>();
 		roleBox.getItems().addAll("Guest", "Event Organizer", "Vendor", "Admin");
 		
-		errorPane = new HBox();
-		errorLabel = new Label();
+		HBox errorPane = new HBox();
+		Label errorLabel = new Label();
 		errorLabel.setTextFill(Color.RED);
 		
-		toLoginPane = new HBox();
-		toLoginTitle = new Label("Already have an account? ");
-		toLoginLink = new Hyperlink("Login");
-		toLoginLink.setOnAction(e -> main.showLoginPage());
+		HBox toLoginPane = new HBox();
+		Label toLoginTitle = new Label("Already have an account? ");
+		Hyperlink toLoginLink = new Hyperlink("Login");
+		toLoginLink.setOnAction(e -> {
+			viewController.showLoginPage();
+		});
 		
-		registerButton = new Button("Register");
+		Button registerButton = new Button("Register");
 		
 		emailPane.getChildren().addAll(emailTitle, emailField);
 		usernamePane.getChildren().addAll(usernameTitle, usernameField);
@@ -86,16 +67,14 @@ public class RegisterPage {
 		registerContainer.setSpacing(10);
 		
 		registerButton.setOnAction(e -> {
+			// harusnya ga perlu static buat function loginnya
 			String response = controller.UserController.register(emailField.getText(), usernameField.getText(), passwordField.getText(), roleBox.getValue());
 			if(response.equals("Success")) {
-				main.showLoginPage();
+				viewController.showLoginPage();
 			}else {
 				errorLabel.setText(response);
 			}
 		});
-	}
-	
-	public VBox getUI() {
-		return registerContainer;
+		return new Scene (registerContainer, 350, 250);
 	}
 }

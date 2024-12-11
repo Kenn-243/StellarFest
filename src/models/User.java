@@ -38,6 +38,7 @@ public class User {
 		return "Success";
 	}
 	
+	// kayaknya ini lebih cocok return object User
 	public static String login(String email, String password) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
 		String query = "SELECT * FROM `User` WHERE user_email = ? AND user_password = ?;";

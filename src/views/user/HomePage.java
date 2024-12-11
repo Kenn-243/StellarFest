@@ -1,16 +1,19 @@
 package views.user;
 
+import controller.ViewController;
+import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import main.Main;
 
 public class HomePage {
-	VBox homeContainer;
+	ViewController viewController;
 	
-	public HomePage(Main main) {
-		homeContainer = new VBox();
+	public HomePage() {
+		this.viewController = ViewController.getInstance();
 	}
 	
-	public VBox getUI() {
-		return homeContainer;
+	public Scene getUI() {
+		VBox homeContainer = new VBox();
+		return new Scene (homeContainer, 350, 200);
 	}
 }

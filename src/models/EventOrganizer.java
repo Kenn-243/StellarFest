@@ -28,11 +28,11 @@ public class EventOrganizer extends User{
 	}
 	
 	public void getGuest() {
-		
+		// dikosongin, karena ikutin sequence diagram
 	}
 	
 	public void getVendors() {
-		
+		// dikosongin, karena ikutin sequence diagram
 	}
 	
 	public void getGuestsByTransactionID(String eventID) {

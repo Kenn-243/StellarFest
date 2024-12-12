@@ -70,10 +70,11 @@ public class ViewEventsPage {
 		eventTable.setItems(eventList);
 		
 		eventTable.setOnMouseClicked(e->{
-			if(eventTable.getSelectionModel().getSelectedItem() != null) {
+			Event selectedEvent = eventTable.getSelectionModel().getSelectedItem();
+			if(selectedEvent != null) {
 				addVendorButton.setDisable(false);
 				addVendorButton.setOnAction(f -> {
-					viewController.showAddVendorPage(user);
+					viewController.showAddVendorPage(user, selectedEvent);
 				});				
 			}
 		});

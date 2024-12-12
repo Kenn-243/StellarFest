@@ -34,24 +34,30 @@ public class Vendor extends User{
 		
 	}
 	
-	public static ObservableList<Vendor> getVendors() {
+	public static ObservableList<Vendor> getVendors(Event event) {
 		ObservableList<Vendor> vendorList = FXCollections.observableArrayList();
 
 		DatabaseConnection connection = DatabaseConnection.getInstance();
 		/*
 		 * Di Soal: Make sure if displayed Vendor hasn’t already invited to events.
 		 * ASUMSI:
-		 * 1. vendor sudah pernah menerima invitation, tapi belum pernah accept invitation!
+		 * 1. vendor sudah pernah menerima invitation untuk event lain, tapi belum pernah accept invitation!
+		 * 2. vendor sudah pernah diundang ke event yang sama
 		 * 2. invitation_role dianggap sama dengan user_role
-		 * 3. invitation status kalau sudah diaccept oleh Vendor adalah "Accepted"
+		 * 3. invitation status kalau sudah diaccept oleh Vendor adalah "Accepted" dan kalau belum statusnya "Invited"
 		 */
-		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` WHERE user_role = ? AND user_id NOT IN ( SELECT user_id FROM `invitation` WHERE invitation_role = ? AND invitation_status = ?)";
+		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` "
+				+ "WHERE user_role = ? AND user_id NOT IN ( "
+				+ "SELECT user_id FROM `invitation` "
+				+ "WHERE (event_id = ? AND invitation_role = ? AND (invitation_status = ? OR invitation_status = ?)))";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setString(1, "Vendor");
-			connection.getPreparedStatement().setString(2, "Vendor");
-			connection.getPreparedStatement().setString(3, "Accepted");
+			connection.getPreparedStatement().setInt(2, Integer.parseInt(event.getEvent_id()));
+			connection.getPreparedStatement().setString(3, "Vendor");
+			connection.getPreparedStatement().setString(4, "Accepted");
+			connection.getPreparedStatement().setString(5, "Invited");
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
 				vendorList.add(new Vendor(String.valueOf(result.getInt("user_id")), result.getString("user_email"), result.getString("user_name"), "", result.getString("user_role")));
@@ -59,6 +65,7 @@ public class Vendor extends User{
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return vendorList;
 	}
 

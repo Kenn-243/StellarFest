@@ -3,6 +3,7 @@ package controller;
 import java.util.Stack;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.Event;
 import models.User;
 import views.eventOrganizer.AddVendorPage;
 import views.eventOrganizer.CreateEventPage;
@@ -60,8 +61,8 @@ public class ViewController {
 		primaryStage.setScene(viewEventsPage);
 	}
 	
-	public void showAddVendorPage(User user) {
-		Scene addVendorPage = new AddVendorPage(user).getUI();
+	public void showAddVendorPage(User user, Event event) {
+		Scene addVendorPage = new AddVendorPage(user, event).getUI();
 		sceneStack.push(addVendorPage);
 		primaryStage.setScene(addVendorPage);
 		primaryStage.show();

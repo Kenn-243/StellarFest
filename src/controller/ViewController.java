@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Event;
 import models.User;
+import views.eventOrganizer.AddGuestPage;
 import views.eventOrganizer.AddVendorPage;
 import views.eventOrganizer.CreateEventPage;
 import views.user.HomePage;
@@ -63,6 +64,13 @@ public class ViewController {
 	
 	public void showAddVendorPage(User user, Event event) {
 		Scene addVendorPage = new AddVendorPage(user, event).getUI();
+		sceneStack.push(addVendorPage);
+		primaryStage.setScene(addVendorPage);
+		primaryStage.show();
+	}
+	
+	public void showAddGuestPage(User user, Event event) {
+		Scene addVendorPage = new AddGuestPage(user, event).getUI();
 		sceneStack.push(addVendorPage);
 		primaryStage.setScene(addVendorPage);
 		primaryStage.show();

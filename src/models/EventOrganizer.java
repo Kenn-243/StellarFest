@@ -1,12 +1,6 @@
 package models;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import data.DatabaseConnection;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class EventOrganizer extends User{
 	private String events_created;

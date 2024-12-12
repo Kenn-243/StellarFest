@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javafx.collections.ObservableList;
 import models.Event;
+import models.Guest;
 import models.Invitation;
 import models.Vendor;
 
@@ -25,8 +26,8 @@ public class EventOrganizerController {
 		
 	}
 	
-	public void getGuest() {
-		
+	public ObservableList<Guest> getGuests(Event event) {
+		return Guest.getGuests(event);
 	}
 	
 	/*

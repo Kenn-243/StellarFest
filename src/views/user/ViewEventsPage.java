@@ -48,7 +48,11 @@ public class ViewEventsPage {
 		Button addVendorButton = new Button("Add Vendor");
 		addVendorButton.setDisable(true);
 		
-		buttonContainer.getChildren().addAll(createEventButton, addVendorButton);
+		Button addGuestButton = new Button("Add Guest");
+		addGuestButton.setDisable(true);
+		
+		buttonContainer.getChildren().addAll(createEventButton, addVendorButton, addGuestButton);
+		buttonContainer.setSpacing(10);
 		
 		ObservableList<Event> eventList =  eventOrganizerController.viewOrganizedEvents(user.getUser_id());
 
@@ -75,7 +79,11 @@ public class ViewEventsPage {
 				addVendorButton.setDisable(false);
 				addVendorButton.setOnAction(f -> {
 					viewController.showAddVendorPage(user, selectedEvent);
-				});				
+				});
+				addGuestButton.setDisable(false);
+				addGuestButton.setOnAction(f -> {
+					viewController.showAddGuestPage(user, selectedEvent);
+				});
 			}
 		});
 		

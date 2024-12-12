@@ -57,8 +57,22 @@ public class User {
 		return user;
 	}
 	
-	public void changeProfile(String email, String name, String oldPassword, String newPassword) {
+	public static String changeProfile(User user, String email, String name, String oldPassword, String newPassword) {
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "UPDATE `User` SET user_email = ?, user_name = ?, user_password = ? WHERE user_id = ?";
 		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setString(1, email);
+			connection.getPreparedStatement().setString(2, name);
+			connection.getPreparedStatement().setString(3, newPassword);
+			connection.executeQuery();
+			connection.executeQuery();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "Success";
 	}
 	
 	public static User getUserByEmail(String email) {

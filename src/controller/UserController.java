@@ -24,8 +24,13 @@ public class UserController {
 		return User.login(email, password);
 	}
 	
-	public void changeProfile(String email, String name, String oldPassword, String newPassword) {
+	public String changeProfile(User user, String email, String name, String oldPassword, String newPassword) {
+		String response = checkChangeProfileInput(user, email, name, oldPassword, newPassword);
+		if(response.equals("Success")) {
+			response = User.changeProfile(user, email, name, oldPassword, newPassword);
+		}
 		
+		return response;
 	}
 	
 	public User getUserByEmail(String email) {
@@ -78,7 +83,17 @@ public class UserController {
 		}
 	}
 	
-	public void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
-		
+	public String checkChangeProfileInput(User user, String email, String name, String oldPassword, String newPassword) {
+		if(getUserByEmail(email) != null) {
+			return "Email must be unique";
+		}else if(getUserByUsername(name) != null) {
+			return "Username must be unique";
+		}else if(!oldPassword.equals(user.getUser_password())) {
+			return "Old password must be the same";
+		}else if(newPassword.length() < 5) {
+			return "New password must be at least 5 characters long";
+		}else {
+			return "Success";
+		}
 	}
 }

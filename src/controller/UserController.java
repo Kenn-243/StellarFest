@@ -3,23 +3,16 @@ package controller;
 import models.User;
 
 public class UserController {
-	public static String register(String email, String name, String password, String role) {
-		User user;
-		String response;
-		
-		user = getUserByEmail(email);
-		if(user != null) {
-			response = "Email already exist";
-			return response;
+	public String register(String email, String name, String password, String role) {
+		if(getUserByEmail(email) != null) {
+			return "Email already exist";
 		}
 		
-		user = getUserByUsername(name);
-		if(user != null) {
-			response = "Username already exist";
-			return response;
+		if(getUserByUsername(name) != null) {
+			return "Username already exist";
 		}
 		
-		response = checkRegisterInput(email, name, password);
+		String response = checkRegisterInput(email, name, password, role);
 		if(response.equals("Success")) {
 			response = User.register(email, name, password, role);
 		}
@@ -27,36 +20,25 @@ public class UserController {
 		return response;
 	}
 	
-	public static String login(String email, String password) {
-		String response;
-		
-		if(email.isBlank()) {
-			response = "Email cannot be empty";
-		}else if(password.isBlank()) {
-			response = "Password cannot be empty";
-		}else {
-			response = models.User.login(email, password);
-		}
-		
-		return response;
+	public User login(String email, String password) {
+		return User.login(email, password);
 	}
 	
-	public static void changeProfile(String email, String name, String oldPassword, String newPassword) {
+	public void changeProfile(String email, String name, String oldPassword, String newPassword) {
 		
 	}
 	
-	public static User getUserByEmail(String email) {
-		User user = models.User.getUserByEmail(email);
+	public User getUserByEmail(String email) {
+		User user = User.getUserByEmail(email);
 		return user;
 	}
 	
-	public static User getUserByUsername(String name) {
-		User user = models.User.getUserByUsername(name);
+	public User getUserByUsername(String name) {
+		User user = User.getUserByUsername(name);
 		return user;
 	}
 	
-	public static String checkRegisterInput(String email, String name, String password) {
-		String response;
+	public String checkRegisterInput(String email, String name, String password, String role) {
 		boolean hasLetter = false, hasNum =false;
 		
 		for (char c : password.toCharArray()) {
@@ -67,20 +49,36 @@ public class UserController {
 			}
 		}
 		
-		if(email.length() < 5 || !email.endsWith("@gmail.com")) {
-			response = "Email length must be more than 5 and ends with @gmail.com";
+		if(email.isBlank()){
+			return "Email cannot be empty";
+		}else if(!email.endsWith("@gmail.com")) {
+			return "Email must end with @gmail.com";
 		}else if(name.isBlank()) {
-			response = "Username cannot be empty";
+			return "Username cannot be empty";
+		}else if(password.isBlank()) {
+			return "Password cannot be empty";
+		}else if(password.length() < 5) {
+			return "Password must be at least 5 characters long";
 		}else if(!hasLetter || !hasNum) {
-			response = "Password must be alphanumeric";
+			return "Password must be alphanumeric";
+		}else if(role == null){
+			return "Role must be picked";
 		}else {
-			response = "Success";
+			return "Success";
 		}
-		
-		return response;
 	}
 	
-	public static void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
+	public String checkLoginInput(String email, String password) {
+		if(email.isBlank()) {
+			return "Email cannot be empty";
+		}else if(password.isBlank()) {
+			return "Password cannot be empty";
+		}else {
+			return "Success";
+		}
+	}
+	
+	public void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
 		
 	}
 }

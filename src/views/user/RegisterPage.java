@@ -1,5 +1,6 @@
 package views.user;
 
+import controller.UserController;
 import controller.ViewController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 
 public class RegisterPage {
 	ViewController viewController;
+	UserController userController = new UserController(); 
 	
 	public RegisterPage() {
 		this.viewController = ViewController.getInstance();
@@ -38,7 +40,7 @@ public class RegisterPage {
 		PasswordField passwordField = new PasswordField();
 		
 		HBox rolePane = new HBox();
-		Label roleTitle = new Label("Nationality");
+		Label roleTitle = new Label("Role");
 		roleTitle.setPrefWidth(100);
 		ComboBox<String> roleBox = new ComboBox<String>();
 		roleBox.getItems().addAll("Guest", "Event Organizer", "Vendor", "Admin");
@@ -67,8 +69,7 @@ public class RegisterPage {
 		registerContainer.setSpacing(10);
 		
 		registerButton.setOnAction(e -> {
-			// harusnya ga perlu static buat function loginnya
-			String response = controller.UserController.register(emailField.getText(), usernameField.getText(), passwordField.getText(), roleBox.getValue());
+			String response = userController.register(emailField.getText(), usernameField.getText(), passwordField.getText(), roleBox.getValue());
 			if(response.equals("Success")) {
 				viewController.showLoginPage();
 			}else {

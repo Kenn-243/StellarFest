@@ -22,7 +22,7 @@ public class User {
 
 	public static String register(String email, String name, String password, String role) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "INSERT INTO `User` (user_email, user_name, user_password, user_role) VALUES (?, ?, ?, ?);";
+		String query = "INSERT INTO `user` (user_email, user_name, user_password, user_role) VALUES (?, ?, ?, ?);";
 		
 		connection.setPreparedStatement(query);
 		try {
@@ -38,29 +38,26 @@ public class User {
 		return "Success";
 	}
 	
-	// kayaknya ini lebih cocok return object User
-	public static String login(String email, String password) {
+	public static User login(String email, String password) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `User` WHERE user_email = ? AND user_password = ?;";
+		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` WHERE user_email = ? AND user_password = ?;";
 		
 		connection.setPreparedStatement(query);
 		User user = null;
 		try {
 			connection.getPreparedStatement().setString(1, email);
 			connection.getPreparedStatement().setString(2, password);
-			connection.executeQuery();
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				user = new User(String.valueOf(result.getString("user_id")), result.getString("user_email"), result.getString("user_name"), result.getString("user_password"), result.getString("user_role"));
+				user = new User(String.valueOf(result.getString("user_id")), result.getString("user_email"), result.getString("user_name"), "", result.getString("user_role"));
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return user != null ? "Success" : "Wrong email or password";
+		return user;
 	}
 	
-	public static void changeProfile(String email, String name, String oldPassword, String newPassword) {
+	public void changeProfile(String email, String name, String oldPassword, String newPassword) {
 		
 	}
 	
@@ -110,5 +107,45 @@ public class User {
 	
 	public static void checkChangeProfileInput(String email, String name, String oldPassword, String newPassword) {
 		
+	}
+
+	public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+
+	public String getUser_email() {
+		return user_email;
+	}
+
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+
+	public String getUser_password() {
+		return user_password;
+	}
+
+	public void setUser_password(String user_password) {
+		this.user_password = user_password;
+	}
+
+	public String getUser_role() {
+		return user_role;
+	}
+
+	public void setUser_role(String user_role) {
+		this.user_role = user_role;
 	}
 }

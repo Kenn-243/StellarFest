@@ -1,9 +1,12 @@
 package models;
 
+import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 import data.DatabaseConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class Event {
 	private String event_id;
@@ -11,16 +14,26 @@ public class Event {
 	private String event_date;
 	private String event_location;
 	private String event_description;
-	private String organization_id;
+	private String organizer_id;
+	
+	public Event(String event_id, String event_name, String event_date, String event_location, String event_description, String organizer_id) {
+		super();
+		this.event_id = event_id;
+		this.event_name = event_name;
+		this.event_date = event_date;
+		this.event_location = event_location;
+		this.event_description = event_description;
+		this.organizer_id = organizer_id;
+	}
 
-	public String createEvent(String eventName, Date date, String location, String description, String organizerID) {
+	public static String createEvent(String eventName, Date date, String location, String description, String organizerID) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "INSERT INTO `Event` (event_name, event_date, event_location, event_description, organizer_id) VALUES (?, ?, ?, ?, ?);";
+		String query = "INSERT INTO `event` (event_name, event_date, event_location, event_description, organizer_id) VALUES (?, ?, ?, ?, ?);";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setString(1, eventName);
-			connection.getPreparedStatement().setDate(2, (java.sql.Date) date);
+			connection.getPreparedStatement().setDate(2, date);
 			connection.getPreparedStatement().setString(3, location);
 			connection.getPreparedStatement().setString(4, description);
 			connection.getPreparedStatement().setInt(5, Integer.parseInt(organizerID));
@@ -34,5 +47,73 @@ public class Event {
 	
 	public void viewEventDetails(String eventID) {
 		
+	}
+	
+	public static ObservableList<Event> viewOrganizedEvents(String userID) {
+        ObservableList<Event> eventList = FXCollections.observableArrayList();
+
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "SELECT * FROM `event` WHERE organizer_id = ?";
+		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(userID));
+			ResultSet result = connection.executeQuery();
+			while(result.next()) {
+				Event event = new Event(String.valueOf(result.getInt("event_id")), result.getString("event_name"), result.getDate("event_date").toString(), result.getString("event_location"), result.getString("event_description"), result.getString("organizer_id"));
+				eventList.add(event);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return eventList;
+	}
+
+	public String getEvent_id() {
+		return event_id;
+	}
+
+	public void setEvent_id(String event_id) {
+		this.event_id = event_id;
+	}
+
+	public String getEvent_name() {
+		return event_name;
+	}
+
+	public void setEvent_name(String event_name) {
+		this.event_name = event_name;
+	}
+
+	public String getEvent_date() {
+		return event_date;
+	}
+
+	public void setEvent_date(String event_date) {
+		this.event_date = event_date;
+	}
+
+	public String getEvent_location() {
+		return event_location;
+	}
+
+	public void setEvent_location(String event_location) {
+		this.event_location = event_location;
+	}
+
+	public String getEvent_description() {
+		return event_description;
+	}
+
+	public void setEvent_description(String event_description) {
+		this.event_description = event_description;
+	}
+
+	public String getOrganizer_id() {
+		return organizer_id;
+	}
+
+	public void setOrganizer_id(String organizer_id) {
+		this.organizer_id = organizer_id;
 	}
 }

@@ -1,6 +1,12 @@
 package models;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import data.DatabaseConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class EventOrganizer extends User{
 	private String events_created;
@@ -14,7 +20,7 @@ public class EventOrganizer extends User{
 	}
 	
 	public void viewOrganizedEvents(String userID) {
-		
+
 	}
 	
 	public void viewOrganizedEventDetails(String eventID) {
@@ -51,5 +57,13 @@ public class EventOrganizer extends User{
 	
 	public void editEventName(String eventID, String eventName) {
 		
+	}
+
+	public String getEvents_created() {
+		return events_created;
+	}
+
+	public void setEvents_created(String events_created) {
+		this.events_created = events_created;
 	}
 }

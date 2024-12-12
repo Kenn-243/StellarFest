@@ -3,9 +3,13 @@ package controller;
 import java.util.Stack;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.User;
+import views.eventOrganizer.AddVendorPage;
+import views.eventOrganizer.CreateEventPage;
 import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
+import views.user.ViewEventsPage;
 
 public class ViewController {
 	private Stack<Scene> sceneStack;
@@ -38,9 +42,28 @@ public class ViewController {
         primaryStage.setScene(registerScene);
     }
 	
-	public void showHomePage() {
-		Scene homePage = new HomePage().getUI();
+	public void showHomePage(User user) {
+		Scene homePage = new HomePage(user).getUI();
 		sceneStack.push(homePage);
 		primaryStage.setScene(homePage);
+	}
+	
+	public void showCreateEventPage(User user) {
+		Scene createEventPage = new CreateEventPage(user).getUI();
+		sceneStack.push(createEventPage);
+		primaryStage.setScene(createEventPage);
+	}
+	
+	public void showViewEventsPage(User user) {
+		Scene viewEventsPage = new ViewEventsPage(user).getUI();
+		sceneStack.push(viewEventsPage);
+		primaryStage.setScene(viewEventsPage);
+	}
+	
+	public void showAddVendorPage(User user) {
+		Scene addVendorPage = new AddVendorPage(user).getUI();
+		sceneStack.push(addVendorPage);
+		primaryStage.setScene(addVendorPage);
+		primaryStage.show();
 	}
 }

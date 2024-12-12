@@ -1,5 +1,6 @@
 package views.user;
 
+import controller.UserController;
 import controller.ViewController;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import models.User;
 
 public class LoginPage {
 	ViewController viewController;
+	UserController userController = new UserController();
 	
 	public LoginPage() {
 		this.viewController = ViewController.getInstance();
@@ -54,10 +56,18 @@ public class LoginPage {
 		loginContainer.setSpacing(10);
 		
 		loginButton.setOnAction(e -> {
-			// kayaknya ga perlu static buat function loginnya
-			String response = controller.UserController.login(emailField.getText(), passwordField.getText());
+			String response = userController.checkLoginInput(emailField.getText(), passwordField.getText()); 
 			if(response.equals("Success")) {
-				viewController.showHomePage();
+				User user = userController.login(emailField.getText(), passwordField.getText());
+				if(user != null) {
+					if(user.getUser_role().equals("Event Organizer") || user.getUser_role().equals("Admin")) {
+						viewController.showViewEventsPage(user);						
+					}else {
+						viewController.showHomePage(user);						
+					}
+				}else {
+					errorLabel.setText("Wrong email or password");
+				}
 			}else {
 				errorLabel.setText(response);
 			}

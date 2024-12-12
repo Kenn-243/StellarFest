@@ -1,8 +1,12 @@
 package controller;
 
+import javafx.collections.ObservableList;
+import models.Admin;
+import models.Event;
+
 public class AdminController {
-	public void viewAllEvents() {
-		
+	public ObservableList<Event> viewAllEvents() {
+		return Admin.viewAllEvents();
 	}
 	
 	public void viewEventDetails(String eventID) {

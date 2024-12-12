@@ -2,13 +2,17 @@ package controller;
 
 import java.util.Date;
 
+import javafx.collections.ObservableList;
+import models.Event;
+import models.Vendor;
+
 public class EventOrganizerController {
 	public void createEvent(String eventName, Date date, String location, String description, String organizerID) {
 		
 	}
 	
-	public void viewOrganizedEvents(String userID) {
-		
+	public ObservableList<Event> viewOrganizedEvents(String userID) {
+		return Event.viewOrganizedEvents(userID);
 	}
 	
 	public void viewOrganizedEventDetails(String eventID) {
@@ -19,8 +23,8 @@ public class EventOrganizerController {
 		
 	}
 	
-	public void getVendors() {
-		
+	public ObservableList<Vendor> getVendors() {
+		return Vendor.getVendors();
 	}
 	
 	public void getGuestsByTransactionID(String eventID) {

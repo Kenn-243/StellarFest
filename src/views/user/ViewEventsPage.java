@@ -6,6 +6,7 @@ import controller.EventOrganizerController;
 import controller.GuestController;
 import controller.VendorController;
 import controller.ViewController;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Event;
+import models.EventOrganizer;
 import models.User;
 
 public class ViewEventsPage {
@@ -162,9 +164,13 @@ public class ViewEventsPage {
 	    eventTable.getColumns().addAll(eventName, eventDate, eventLocation);
 
 	    if (includeOrganizer) {
-	        TableColumn<Event, String> organizerId = new TableColumn<>("Organizer");
-	        organizerId.setCellValueFactory(new PropertyValueFactory<>("organizer_id"));
-	        eventTable.getColumns().add(organizerId);
+	        TableColumn<Event, String> eventOrganizer = new TableColumn<>("Organizer");
+	        eventOrganizer.setCellValueFactory(e -> {
+	        	String organizer_id = e.getValue().getOrganizer_id();
+	        	EventOrganizer organizer = eventOrganizerController.getOrganizerById(organizer_id);
+	        	return new SimpleStringProperty(organizer.getUser_name());
+	        });
+	        eventTable.getColumns().add(eventOrganizer);
 	    }
 
 	    eventTable.setItems(eventList);

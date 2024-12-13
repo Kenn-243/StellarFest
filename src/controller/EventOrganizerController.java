@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javafx.collections.ObservableList;
 import models.Event;
+import models.EventOrganizer;
 import models.Guest;
 import models.Invitation;
 import models.User;
@@ -103,5 +104,10 @@ public class EventOrganizerController {
 		}else {
 			return response;
 		}
+	}
+	
+	// ditambahkan buat mendapatkan event organizer berdasarkan ID
+	public EventOrganizer getOrganizerById(String organizerId) {
+		return EventOrganizer.getOrganizerById(organizerId);
 	}
 }

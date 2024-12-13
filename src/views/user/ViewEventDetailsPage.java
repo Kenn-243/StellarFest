@@ -44,7 +44,7 @@ public class ViewEventDetailsPage {
 		VBox viewEventDetailsContainer = new VBox();
 		
 		HBox namePane = new HBox();
-		Label nameLabel = new Label("Event Name");
+		Label nameLabel = new Label("Name");
 		nameLabel.setPrefWidth(100);
 		TextArea nameField = new TextArea();
 		nameField.setText(event.getEvent_name());
@@ -53,7 +53,7 @@ public class ViewEventDetailsPage {
 		nameField.setPrefRowCount(1);
 		
 		HBox datePane = new HBox();
-		Label dateLabel = new Label("Event Date");
+		Label dateLabel = new Label("Date");
 		dateLabel.setPrefWidth(100);
 		TextArea dateField = new TextArea();
 		dateField.setText(event.getEvent_date());
@@ -90,7 +90,7 @@ public class ViewEventDetailsPage {
 		descriptionPane.getChildren().addAll(descriptionLabel, descriptionField);
 		
 		viewEventDetailsContainer.getChildren().addAll(namePane, datePane, locationPane, descriptionPane);
-		if(user.getUser_role().equals("Event Organizer")) {
+		if(user.getUser_role().equals("Event Organizer") || user.getUser_role().equals("Admin")) {
 			ObservableList<User> attendeeList = eventOrganizerController.viewOrganizedEventDetails(event.getEvent_id());
 			
 			TableView<User> attendeeTable = new TableView<User>();

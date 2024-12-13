@@ -1,5 +1,7 @@
 package controller;
 
+import javafx.collections.ObservableList;
+import models.Event;
 import models.Invitation;
 import models.User;
 
@@ -9,8 +11,9 @@ public class VendorController {
 		return Invitation.acceptInvitation(eventID, user);
 	}
 	
-	public void viewAcceptedEvents(String email) {
-		
+	// ASUMSI: return type-nya menggunakan ObservableList karena di class diagram tidak di-specify
+	public ObservableList<Event> viewAcceptedEvents(String email) {
+		return Event.viewAcceptedEvents(email);
 	}
 	
 	public void manageVendor(String description, String  product) {

@@ -5,13 +5,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Event;
 import models.User;
-import views.eventOrganizer.AddGuestPage;
-import views.eventOrganizer.AddVendorPage;
+import views.eventOrganizer.AddVendorGuestPage;
 import views.eventOrganizer.CreateEventPage;
 import views.guestVendor.ViewInvitationPage;
 import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
+import views.user.ViewEventDetailsPage;
 import views.user.ViewEventsPage;
 
 public class ViewController {
@@ -31,6 +31,12 @@ public class ViewController {
 	
 	public void setStage(Stage stage) {
 		this.primaryStage = stage;
+	}
+	
+	public void back(User user) {
+		sceneStack.pop();
+		Scene prevScene = sceneStack.peek();
+		primaryStage.setScene(prevScene);
 	}
 	
 	public void showLoginPage() {
@@ -63,21 +69,21 @@ public class ViewController {
 		primaryStage.setScene(viewEventsPage);
 	}
 	
-	public void showAddVendorPage(User user, Event event) {
-		Scene addVendorPage = new AddVendorPage(user, event).getUI();
-		sceneStack.push(addVendorPage);
-		primaryStage.setScene(addVendorPage);
-	}
-	
-	public void showAddGuestPage(User user, Event event) {
-		Scene addVendorPage = new AddGuestPage(user, event).getUI();
-		sceneStack.push(addVendorPage);
-		primaryStage.setScene(addVendorPage);
+	public void showAddVendorGuestPage(User user, Event event, String addType) {
+		Scene addVendorGuestPage = new AddVendorGuestPage(user, event, addType).getUI();
+		sceneStack.push(addVendorGuestPage);
+		primaryStage.setScene(addVendorGuestPage);
 	}
 	
 	public void showViewInvitationPage(User user) {
 		Scene viewInvitationPage = new ViewInvitationPage(user).getUI();
 		sceneStack.push(viewInvitationPage);
 		primaryStage.setScene(viewInvitationPage);
+	}
+	
+	public void showViewEventDetailsPage(User user, Event event) {
+		Scene viewEventDetailsPage = new ViewEventDetailsPage(user, event).getUI();
+		sceneStack.push(viewEventDetailsPage);
+		primaryStage.setScene(viewEventDetailsPage);
 	}
 }

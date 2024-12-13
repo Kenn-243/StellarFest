@@ -36,7 +36,7 @@ public class Invitation {
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(event.getEvent_id()));
 			connection.getPreparedStatement().setInt(2, Integer.parseInt(user.getUser_id()));
-			connection.getPreparedStatement().setString(3, "Invited");
+			connection.getPreparedStatement().setString(3, "Pending");
 			connection.getPreparedStatement().setString(4, user.getUser_role());
 			connection.executeUpdate();
 		} catch (NumberFormatException e) {
@@ -71,13 +71,12 @@ public class Invitation {
 		ObservableList<Invitation> invitationList = FXCollections.observableArrayList();
 		
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `invitation` WHERE user_id = ? AND invitation_status = ?";
-		User user = User.getUserByEmail(email);
+		String query = "SELECT * FROM `invitation` WHERE user_email = ? AND invitation_status = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
-			connection.getPreparedStatement().setInt(1, Integer.parseInt(user.getUser_id()));
-			connection.getPreparedStatement().setString(2, "Invited");
+			connection.getPreparedStatement().setString(1, email);
+			connection.getPreparedStatement().setString(2, "Pending");
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
 				String invitation_id = String.valueOf(result.getInt("invitation_id"));

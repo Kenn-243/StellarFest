@@ -6,11 +6,12 @@ import javafx.collections.ObservableList;
 import models.Event;
 import models.Guest;
 import models.Invitation;
+import models.User;
 import models.Vendor;
 
 public class EventOrganizerController {
 	public void createEvent(String eventName, Date date, String location, String description, String organizerID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram dilempar ke EventController
 	}
 	
 	/*
@@ -22,8 +23,10 @@ public class EventOrganizerController {
 		return Event.viewOrganizedEvents(userID);
 	}
 	
-	public void viewOrganizedEventDetails(String eventID) {
-		
+	public ObservableList<User> viewOrganizedEventDetails(String eventID) {
+		ObservableList<User> attendeeList = Guest.getGuestsByTransactionID(eventID);
+		attendeeList.addAll(Vendor.getVendorsByTransactionID(eventID));
+		return attendeeList;
 	}
 	
 	/*

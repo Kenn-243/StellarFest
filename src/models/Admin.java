@@ -16,7 +16,7 @@ public class Admin extends User{
 		ObservableList<Event> eventList = FXCollections.observableArrayList();
 
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT event_id, event_name, event_date, event_location, organizer_id FROM `event`";
+		String query = "SELECT * FROM `event`";
 		
 		connection.setPreparedStatement(query);
 		try {
@@ -26,8 +26,9 @@ public class Admin extends User{
 				String event_name = result.getString("event_name");
 				String event_date = result.getDate("event_date").toString();
 				String event_location = result.getString("event_location");
+				String event_description = result.getString("event_description");
 				String organizer_id = String.valueOf(result.getInt("organizer_id"));
-				eventList.add(new Event(event_id, event_name, event_date, event_location, "", organizer_id));
+				eventList.add(new Event(event_id, event_name, event_date, event_location, event_description, organizer_id));
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();

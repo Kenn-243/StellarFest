@@ -19,11 +19,11 @@ public class Vendor extends User{
 	}
 	
 	public void acceptInvitation(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram dilempar ke Invitation
 	}
 	
 	public void viewAcceptedEvents(String email) {
-		
+		// dikosongkan karena berdasarkan sequence diagram dilempar ke Event
 	}
 	
 	public void manageVendor(String description, String  product) {
@@ -44,7 +44,7 @@ public class Vendor extends User{
 		 * 1. vendor sudah pernah menerima invitation untuk event lain, tapi belum pernah accept invitation akan ditampilkan
 		 * 2. vendor sudah pernah diundang ke event yang sama tidak akan ditampilkan
 		 * 2. invitation_role dianggap sama dengan user_role
-		 * 3. invitation status kalau sudah diaccept oleh Vendor adalah "Accepted" dan kalau belum statusnya "Invited"
+		 * 3. invitation status kalau sudah diaccept oleh Vendor adalah "Accepted" dan kalau belum statusnya "Pending"
 		 */
 		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` "
 				+ "WHERE user_role = ? AND user_id NOT IN ( "
@@ -57,7 +57,33 @@ public class Vendor extends User{
 			connection.getPreparedStatement().setInt(2, Integer.parseInt(event.getEvent_id()));
 			connection.getPreparedStatement().setString(3, "Vendor");
 			connection.getPreparedStatement().setString(4, "Accepted");
-			connection.getPreparedStatement().setString(5, "Invited");
+			connection.getPreparedStatement().setString(5, "Pending");
+			ResultSet result = connection.executeQuery();
+			while(result.next()) {
+				String user_id = String.valueOf(result.getInt("user_id"));
+				String user_email = result.getString("user_email");
+				String user_name = result.getString("user_name");
+				String user_role = result.getString("user_role");
+				vendorList.add(new Vendor(user_id, user_email, user_name, "", user_role));
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return vendorList;
+	}
+	
+	public static ObservableList<User> getVendorsByTransactionID(String eventID) {
+		ObservableList<User> vendorList = FXCollections.observableArrayList();
+
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "SELECT u.user_id, u.user_email, u.user_name, u.user_role FROM `user` AS u JOIN `invitation` AS i ON u.user_id = i.user_id WHERE i.event_id = ? AND i.invitation_status = ? AND i.invitation_role = ?";
+		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			connection.getPreparedStatement().setString(2, "Accepted");
+			connection.getPreparedStatement().setString(3, "Vendor");
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
 				String user_id = String.valueOf(result.getInt("user_id"));

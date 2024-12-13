@@ -1,8 +1,12 @@
 package controller;
 
+import models.Invitation;
+import models.User;
+
 public class VendorController {
-	public void acceptInvitation(String eventID) {
-		
+	// ASUMSI: parameter object user ditambahkan supaya bisa update invitation untuk event yang user pilih.
+	public String acceptInvitation(String eventID, User user) {
+		return Invitation.acceptInvitation(eventID, user);
 	}
 	
 	public void viewAcceptedEvents(String email) {

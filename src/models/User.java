@@ -49,7 +49,11 @@ public class User {
 			connection.getPreparedStatement().setString(2, password);
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				user = new User(String.valueOf(result.getString("user_id")), result.getString("user_email"), result.getString("user_name"), "", result.getString("user_role"));
+				String user_id = String.valueOf(result.getInt("user_id"));
+				String user_email = result.getString("user_email");
+				String user_name = result.getString("user_name");
+				String user_role = result.getString("user_role");
+				user = new User(user_id, user_email, user_name, "", user_role);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -57,17 +61,19 @@ public class User {
 		return user;
 	}
 	
+	// ASUMSI: perlu passing object user supaya bisa mendapatkan user_id
+	// oldPassword tidak digunakan karena tidak diperlukan untuk proses update profile, hanya diperlukan buat validasi newPassword di controller
 	public static String changeProfile(User user, String email, String name, String oldPassword, String newPassword) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "UPDATE `User` SET user_email = ?, user_name = ?, user_password = ? WHERE user_id = ?";
+		String query = "UPDATE `user` SET user_email = ?, user_name = ?, user_password = ? WHERE user_id = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setString(1, email);
 			connection.getPreparedStatement().setString(2, name);
 			connection.getPreparedStatement().setString(3, newPassword);
-			connection.executeQuery();
-			connection.executeQuery();
+			connection.getPreparedStatement().setInt(4, Integer.parseInt(user.getUser_id()));
+			connection.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -77,16 +83,19 @@ public class User {
 	
 	public static User getUserByEmail(String email) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `User` WHERE user_email = ?";
+		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` WHERE user_email = ?";
 		
 		connection.setPreparedStatement(query);
 		User user = null;
 		try {
 			connection.getPreparedStatement().setString(1, email);
-			connection.executeQuery();
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				user = new User(String.valueOf(result.getString("user_id")), result.getString("user_email"), result.getString("user_name"), result.getString("user_password"), result.getString("user_role"));
+				String user_id = String.valueOf(result.getInt("user_id"));
+				String user_email = result.getString("user_email");
+				String user_name = result.getString("user_name");
+				String user_role = result.getString("user_role");
+				user = new User(user_id, user_email, user_name, "", user_role);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -97,16 +106,19 @@ public class User {
 	
 	public static User getUserByUsername(String name) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `User` WHERE user_name = ?";
+		String query = "SELECT user_id, user_email, user_name, user_role FROM `user` WHERE user_name = ?";
 		
 		connection.setPreparedStatement(query);
 		User user = null;
 		try {
 			connection.getPreparedStatement().setString(1, name);
-			connection.executeQuery();
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				user = new User(String.valueOf(result.getString("user_id")), result.getString("user_email"), result.getString("user_name"), result.getString("user_password"), result.getString("user_role"));
+				String user_id = String.valueOf(result.getInt("user_id"));
+				String user_email = result.getString("user_email");
+				String user_name = result.getString("user_name");
+				String user_role = result.getString("user_role");
+				user = new User(user_id, user_email, user_name, "", user_role);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

@@ -1,5 +1,8 @@
 package controller;
 
+import javafx.collections.ObservableList;
+import models.Invitation;
+
 public class InvitationController {
 	public void sendInvitation(String email) {
 		/*
@@ -15,7 +18,7 @@ public class InvitationController {
 		
 	}
 	
-	public void getInvitations(String email) {
-		
+	public ObservableList<Invitation> getInvitations(String email) {
+		return Invitation.getInvitations(email);
 	}
 }

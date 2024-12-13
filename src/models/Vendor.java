@@ -41,8 +41,8 @@ public class Vendor extends User{
 		/*
 		 * Di Soal: Make sure if displayed Vendor hasn’t already invited to events.
 		 * ASUMSI:
-		 * 1. vendor sudah pernah menerima invitation untuk event lain, tapi belum pernah accept invitation!
-		 * 2. vendor sudah pernah diundang ke event yang sama
+		 * 1. vendor sudah pernah menerima invitation untuk event lain, tapi belum pernah accept invitation akan ditampilkan
+		 * 2. vendor sudah pernah diundang ke event yang sama tidak akan ditampilkan
 		 * 2. invitation_role dianggap sama dengan user_role
 		 * 3. invitation status kalau sudah diaccept oleh Vendor adalah "Accepted" dan kalau belum statusnya "Invited"
 		 */
@@ -60,7 +60,11 @@ public class Vendor extends User{
 			connection.getPreparedStatement().setString(5, "Invited");
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				vendorList.add(new Vendor(String.valueOf(result.getInt("user_id")), result.getString("user_email"), result.getString("user_name"), "", result.getString("user_role")));
+				String user_id = String.valueOf(result.getInt("user_id"));
+				String user_email = result.getString("user_email");
+				String user_name = result.getString("user_name");
+				String user_role = result.getString("user_role");
+				vendorList.add(new Vendor(user_id, user_email, user_name, "", user_role));
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();

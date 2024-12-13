@@ -62,6 +62,8 @@ public class LoginPage {
 				if(user != null) {
 					if(user.getUser_role().equals("Event Organizer") || user.getUser_role().equals("Admin")) {
 						viewController.showViewEventsPage(user);						
+					}else if(user.getUser_role().equals("Guest") || user.getUser_role().equals("Vendor")) {
+						viewController.showViewInvitationPage(user);
 					}else {
 						viewController.showHomePage(user);						
 					}

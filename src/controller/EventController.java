@@ -36,4 +36,9 @@ public class EventController {
 	public void viewEventDetails(String eventID) {
 		
 	}
+	
+	// ditambahkan buat mendapatkan event berdasarkan ID
+	public Event getEventById(String eventID) {
+		return Event.getEventById(eventID);
+	}
 }

@@ -24,6 +24,7 @@ public class UserController {
 		return User.login(email, password);
 	}
 	
+	// ASUMSI: perlu passing object user supaya bisa mendapatkan user_id
 	public String changeProfile(User user, String email, String name, String oldPassword, String newPassword) {
 		String response = checkChangeProfileInput(user, email, name, oldPassword, newPassword);
 		if(response.equals("Success")) {

@@ -53,20 +53,50 @@ public class Event {
         ObservableList<Event> eventList = FXCollections.observableArrayList();
 
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `event` WHERE organizer_id = ?";
+		String query = "SELECT event_id, event_name, event_date, event_location, organizer_id FROM `event` WHERE organizer_id = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(userID));
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				Event event = new Event(String.valueOf(result.getInt("event_id")), result.getString("event_name"), result.getDate("event_date").toString(), result.getString("event_location"), result.getString("event_description"), result.getString("organizer_id"));
-				eventList.add(event);
+				String event_id = String.valueOf(result.getInt("event_id"));
+				String event_name = result.getString("event_name");
+				String event_date = result.getDate("event_date").toString();
+				String event_location = result.getString("event_location");
+				String organizer_id = String.valueOf(result.getInt("organizer_id"));
+				eventList.add(new Event(event_id, event_name, event_date, event_location, "", organizer_id));
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return eventList;
+	}
+	
+	// ditambahkan buat mendapatkan event berdasarkan id;
+	public static Event getEventById(String eventID) {
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "SELECT * FROM `event` WHERE event_id = ?";
+		Event event = null;
+		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			ResultSet result = connection.executeQuery();
+			while(result.next()) {
+				String event_id = String.valueOf(result.getInt("event_id"));
+				String event_name = result.getString("event_name");
+				String event_date = result.getDate("event_date").toString();
+				String event_location = result.getString("event_location");
+				String event_description = result.getString("event_description");
+				String organizer_id = String.valueOf(result.getInt("organizer_id"));
+				event = new Event(event_id, event_name, event_date, event_location, event_description, organizer_id);
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return event;
 	}
 
 	public String getEvent_id() {

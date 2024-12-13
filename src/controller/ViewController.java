@@ -8,6 +8,7 @@ import models.User;
 import views.eventOrganizer.AddGuestPage;
 import views.eventOrganizer.AddVendorPage;
 import views.eventOrganizer.CreateEventPage;
+import views.guestVendor.ViewInvitationPage;
 import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
@@ -66,13 +67,17 @@ public class ViewController {
 		Scene addVendorPage = new AddVendorPage(user, event).getUI();
 		sceneStack.push(addVendorPage);
 		primaryStage.setScene(addVendorPage);
-		primaryStage.show();
 	}
 	
 	public void showAddGuestPage(User user, Event event) {
 		Scene addVendorPage = new AddGuestPage(user, event).getUI();
 		sceneStack.push(addVendorPage);
 		primaryStage.setScene(addVendorPage);
-		primaryStage.show();
+	}
+	
+	public void showViewInvitationPage(User user) {
+		Scene viewInvitationPage = new ViewInvitationPage(user).getUI();
+		sceneStack.push(viewInvitationPage);
+		primaryStage.setScene(viewInvitationPage);
 	}
 }

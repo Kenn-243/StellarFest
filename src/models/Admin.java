@@ -22,8 +22,12 @@ public class Admin extends User{
 		try {
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {
-				Event event = new Event(String.valueOf(result.getInt("event_id")), result.getString("event_name"), result.getDate("event_date").toString(), result.getString("event_location"), "", String.valueOf(result.getInt("organizer_id")));
-				eventList.add(event);
+				String event_id = String.valueOf(result.getInt("event_id"));
+				String event_name = result.getString("event_name");
+				String event_date = result.getDate("event_date").toString();
+				String event_location = result.getString("event_location");
+				String organizer_id = String.valueOf(result.getInt("organizer_id"));
+				eventList.add(new Event(event_id, event_name, event_date, event_location, "", organizer_id));
 			}
 		}catch (SQLException e) {
 			e.printStackTrace();

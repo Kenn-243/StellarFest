@@ -26,6 +26,13 @@ public class EventOrganizerController {
 		
 	}
 	
+	/*
+	 * ASUMSI:
+	 * 1. return type-nya menggunakan ObservableList karena di class diagram tidak di-specify
+	 * 2. Di Sequence Diagram, panahnya ke vendor, tapi jadinya aneh karena lagi mau getGuests()
+	 * 3. method getGuests(event) diarahkan ke Guest class supaya lebih masuk akal
+	 * 4. tambah parameter event supaya bisa check apakah vendor sudah pernah diundang ke event tersebut
+	 */
 	public ObservableList<Guest> getGuests(Event event) {
 		return Guest.getGuests(event);
 	}

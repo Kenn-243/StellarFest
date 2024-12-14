@@ -1,9 +1,12 @@
 package views.eventOrganizer;
 
 import java.util.ArrayList;
+import controller.EventController;
 import controller.EventOrganizerController;
 import controller.ViewController;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,20 +23,31 @@ import models.Vendor;
 
 public class AddVendorGuestPage {
 	ViewController viewController;
-	EventOrganizerController eventOrganizerController = new EventOrganizerController();
+	EventOrganizerController eventOrganizerController;
+	EventController eventController;
 	User user;
 	Event event;
 	String addType;
 	
-	public AddVendorGuestPage(User loggedInUser, Event invitedEvent, String addType) {
+	public AddVendorGuestPage(User loggedInUser, String eventId, String addType) {
 		this.viewController = ViewController.getInstance();
+		this.eventOrganizerController = new EventOrganizerController();
+		this.eventController = new EventController();
 		this.user = loggedInUser;
-		this.event = invitedEvent;
+		this.event = eventController.getEventById(eventId);
 		this.addType = addType;
 	}
 	
 	public Scene getUI() {
 		VBox addContainer = new VBox();
+		addContainer.setPadding(new Insets(15));
+		
+		Label titleLabel = new Label();
+		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+		
+		HBox buttonContainer = new HBox();
+		buttonContainer.setAlignment(Pos.CENTER);
+		buttonContainer.setSpacing(10);
 		Button inviteButton = new Button();
 		
 		HBox errorPane = new HBox();
@@ -43,15 +57,28 @@ public class AddVendorGuestPage {
 		errorPane.getChildren().addAll(errorLabel);
 		
 		if(addType.equals("Vendor")) {
-			addVendor(addContainer, inviteButton, errorPane, errorLabel);			
+			addVendor(addContainer, titleLabel, inviteButton, errorPane, errorLabel, addType);			
 		}else if(addType.equals("Guest")) {
-			addGuest(addContainer, inviteButton, errorPane, errorLabel);
+			addGuest(addContainer, titleLabel, inviteButton, errorPane, errorLabel, addType);
 		}
 		
-		return new Scene(addContainer, 350, 250);
+		Button backButton = new Button("Back");
+		backButton.setOnAction(e -> {
+			viewController.back();
+		});
+		
+		buttonContainer.getChildren().addAll(inviteButton, backButton);
+		
+		addContainer.getChildren().addAll(buttonContainer);
+		addContainer.setSpacing(10);
+		addContainer.setAlignment(Pos.CENTER);
+		
+		return new Scene(addContainer, 600, 500);
 	}
 
-	private void addVendor(VBox addVendorContainer, Button inviteVendorsButton, HBox errorPane, Label errorLabel) {
+	private void addVendor(VBox addVendorContainer, Label titleLabel, Button inviteVendorsButton, HBox errorPane, Label errorLabel, String addType) {
+		titleLabel.setText("Add Vendor");
+		
 		inviteVendorsButton.setText("Invite Vendor(s)");
 
 		ObservableList<Vendor> vendorList = eventOrganizerController.getVendors(event);
@@ -71,9 +98,10 @@ public class AddVendorGuestPage {
 		select.setCellValueFactory(new PropertyValueFactory<>("select"));
 		
 		vendorTable.getColumns().addAll(vendorId, vendorEmail, vendorName, select);
+		vendorTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		vendorTable.setItems(vendorList);
 		
-		addVendorContainer.getChildren().addAll(inviteVendorsButton, errorPane, vendorTable);
+		addVendorContainer.getChildren().addAll(titleLabel, vendorTable, errorPane);
 		
 		inviteVendorsButton.setOnAction(e -> {
 			ArrayList<String> emails = new ArrayList<String>();
@@ -83,11 +111,13 @@ public class AddVendorGuestPage {
 				}
 			}
 			
-			sendInvitation(emails, errorLabel);
+			sendInvitation(emails, errorLabel, addType);
 		});
 	}
 	
-	private void addGuest(VBox addGuestContainer, Button inviteGuestsButton, HBox errorPane, Label errorLabel) {
+	private void addGuest(VBox addGuestContainer, Label titleLabel, Button inviteGuestsButton, HBox errorPane, Label errorLabel, String addType) {
+		titleLabel.setText("Add Vendor");
+		
 		inviteGuestsButton.setText("Invite Guest(s)");
 
 		ObservableList<Guest> guestList = eventOrganizerController.getGuests(event);
@@ -107,9 +137,10 @@ public class AddVendorGuestPage {
 		select.setCellValueFactory(new PropertyValueFactory<>("select"));
 		
 		guestTable.getColumns().addAll(guestId, guestEmail, guestName, select);
+		guestTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		guestTable.setItems(guestList);
 		
-		addGuestContainer.getChildren().addAll(inviteGuestsButton, errorPane, guestTable);
+		addGuestContainer.getChildren().addAll(titleLabel, guestTable, errorPane);
 		
 		inviteGuestsButton.setOnAction(e -> {
 			ArrayList<String> emails = new ArrayList<String>();
@@ -119,14 +150,14 @@ public class AddVendorGuestPage {
 				}
 			}
 			
-			sendInvitation(emails, errorLabel);
+			sendInvitation(emails, errorLabel, addType);
 		});
 	}
 
-	private void sendInvitation(ArrayList<String> emails, Label errorLabel) {
+	private void sendInvitation(ArrayList<String> emails, Label errorLabel, String target) {
 		if(!emails.isEmpty()) {
 			for (String email : emails) {
-				String response = eventOrganizerController.sendInvitation(email, event);
+				String response = eventOrganizerController.sendInvitation(email, event, target);
 				if(response.equals("Success")){
 					viewController.showViewEventsPage(user);
 				}
@@ -136,7 +167,7 @@ public class AddVendorGuestPage {
 			}
 		}
 		else {
-			errorLabel.setText("Please select a guest.");
+			errorLabel.setText("Please select a " + target.toLowerCase() + ".");
 		}
 	}
 }

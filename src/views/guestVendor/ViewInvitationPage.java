@@ -9,18 +9,22 @@ import controller.VendorController;
 import controller.ViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import models.Event;
 import models.Invitation;
 import models.User;
+import views.component.Navbar;
 
 public class ViewInvitationPage {
 	ViewController viewController;
@@ -41,12 +45,12 @@ public class ViewInvitationPage {
 	
 	public Scene getUI() {
 		VBox viewInvitationsContainer = new VBox();
+		viewInvitationsContainer.setPadding(new Insets(0, 15, 15, 15));
 		
-		Button acceptInvitationsButton = new Button("Accept Invitation(s)");
+		BorderPane navbar = new Navbar(user).getUI();
 		
-		HBox errorPane = new HBox();
-		Label errorLabel = new Label();
-		errorLabel.setTextFill(Color.RED);
+		Label titleLabel = new Label("Invitations");
+		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
 		ObservableList<Invitation> invitationList = invitationController.getInvitations(user.getUser_email());
 		
@@ -78,11 +82,22 @@ public class ViewInvitationPage {
 		TableColumn<Invitation, Boolean> select = new TableColumn<>("Select");
 		select.setCellValueFactory(new PropertyValueFactory<>("select"));
 		
-		errorPane.getChildren().addAll(errorLabel);
-		invitationTable.getColumns().addAll(invitationId, eventName, eventDate, invitationStatus, invitationRole, select);
-		invitationTable.setItems(invitationList);
+		HBox buttonContainer = new HBox();
+		Button acceptInvitationsButton = new Button("Accept Invitation(s)");
 		
-		viewInvitationsContainer.getChildren().addAll(acceptInvitationsButton, errorPane, invitationTable);
+		HBox errorPane = new HBox();
+		Label errorLabel = new Label();
+		errorLabel.setTextFill(Color.RED);
+		
+		invitationTable.getColumns().addAll(invitationId, eventName, eventDate, invitationStatus, invitationRole, select);
+		invitationTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		invitationTable.setItems(invitationList);
+		buttonContainer.getChildren().addAll(acceptInvitationsButton);
+		errorPane.getChildren().addAll(errorLabel);
+		
+		viewInvitationsContainer.getChildren().addAll(navbar, titleLabel, invitationTable, buttonContainer, errorPane);
+		viewInvitationsContainer.setSpacing(10);
+		viewInvitationsContainer.setAlignment(Pos.CENTER);
 		
 		acceptInvitationsButton.setOnAction(e -> {
 			ArrayList<String> eventIds = new ArrayList<String>();
@@ -113,6 +128,6 @@ public class ViewInvitationPage {
 			}
 		});
 		
-		return new Scene(viewInvitationsContainer, 350, 250);
+		return new Scene(viewInvitationsContainer, 600, 500);
 	}
 }

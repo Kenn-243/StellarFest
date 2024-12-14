@@ -8,16 +8,21 @@ import controller.VendorController;
 import controller.ViewController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import models.Event;
 import models.EventOrganizer;
 import models.User;
+import views.component.Navbar;
 
 public class ViewEventsPage {
 	ViewController viewController;
@@ -40,8 +45,15 @@ public class ViewEventsPage {
 	
 	public Scene getUI() {
 		VBox viewEventsContainer = new VBox();
+		viewEventsContainer.setPadding(new Insets(15));
+		
+		BorderPane navbar = new Navbar(user).getUI();
+		
+		Label titleLabel = new Label();
+		titleLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 		
 		HBox buttonContainer = new HBox();
+		buttonContainer.setSpacing(10);
 		Button viewEventDetailsButton = new Button("View Event Details");
 		viewEventDetailsButton.setDisable(true);
 		
@@ -49,22 +61,23 @@ public class ViewEventsPage {
 		
 		TableView<Event> eventTable = new TableView<Event>();
 		
-		Button backButton = new Button("Back");
-		backButton.setOnAction(e -> {
-			viewController.back(user);
-		});
+		viewEventsContainer.getChildren().addAll(navbar, titleLabel);
 		
 		if(user.getUser_role().equals("Event Organizer")) {
+			titleLabel.setText("Organized Events");
 			viewOrganizedEvents(viewEventsContainer, eventList, eventTable, buttonContainer, viewEventDetailsButton);
 		}else if(user.getUser_role().equals("Admin")) {
+			titleLabel.setText("Events");
 			viewAllEvents(viewEventsContainer, eventList, eventTable, buttonContainer, viewEventDetailsButton);
 		}else if(user.getUser_role().equals("Vendor") || user.getUser_role().equals("Guest")) {
+			titleLabel.setText("Accepted Events");
 			viewAcceptedEvents(viewEventsContainer, eventList, eventTable, buttonContainer, viewEventDetailsButton);
 		}
 		
-		viewEventsContainer.getChildren().addAll(backButton);
+		viewEventsContainer.setSpacing(10);
+		viewEventsContainer.setAlignment(Pos.CENTER);
 		
-		return new Scene (viewEventsContainer, 450, 250);
+		return new Scene (viewEventsContainer, 600, 300);
 	}
 
 	private void viewOrganizedEvents(VBox viewEventsContainer, ObservableList<Event> eventList, TableView<Event> eventTable, HBox buttonContainer, Button viewEventDetailsButton) {
@@ -93,24 +106,27 @@ public class ViewEventsPage {
 			if(selectedEvent != null) {
 				viewEventDetailsButton.setDisable(false);
 				viewEventDetailsButton.setOnAction(f -> {
-					viewController.showViewEventDetailsPage(user, selectedEvent);
+					viewController.showViewEventDetailsPage(user, selectedEvent.getEvent_id());
 				});
 				addVendorButton.setDisable(false);
 				addVendorButton.setOnAction(f -> {
-					viewController.showAddVendorGuestPage(user, selectedEvent, "Vendor");
+					viewController.showAddVendorGuestPage(user, selectedEvent.getEvent_id(), "Vendor");
 				});
 				addGuestButton.setDisable(false);
 				addGuestButton.setOnAction(f -> {
-					viewController.showAddVendorGuestPage(user, selectedEvent, "Guest");
+					viewController.showAddVendorGuestPage(user, selectedEvent.getEvent_id(), "Guest");
 				});
 			}
 		});
 	}
 	
 	private void viewAllEvents(VBox viewEventsContainer, ObservableList<Event> eventList, TableView<Event> eventTable, HBox buttonContainer, Button viewEventDetailsButton) {
-		buttonContainer.getChildren().addAll(viewEventDetailsButton);
+		Button deleteEventButton = new Button("Delete Event");
+		deleteEventButton.setDisable(true);
 		
-		eventList =  adminController.viewAllEvents();
+		buttonContainer.getChildren().addAll(viewEventDetailsButton, deleteEventButton);
+		
+		eventList = adminController.viewAllEvents();
 		
 		setupEventTable(eventTable, eventList, true);
 		
@@ -121,7 +137,13 @@ public class ViewEventsPage {
 			if(selectedEvent != null) {
 				viewEventDetailsButton.setDisable(false);
 				viewEventDetailsButton.setOnAction(f -> {
-					viewController.showViewEventDetailsPage(user, selectedEvent);
+					viewController.showViewEventDetailsPage(user, selectedEvent.getEvent_id());
+				});
+				deleteEventButton.setDisable(false);
+				deleteEventButton.setOnAction(f -> {
+					adminController.deleteEvent(selectedEvent.getEvent_id());
+					eventTable.getColumns().clear();
+					setupEventTable(eventTable, adminController.viewAllEvents(), true);
 				});
 			}
 		});
@@ -145,7 +167,7 @@ public class ViewEventsPage {
 			if(selectedEvent != null) {
 				viewEventDetailsButton.setDisable(false);
 				viewEventDetailsButton.setOnAction(f -> {
-					viewController.showViewEventDetailsPage(user, selectedEvent);
+					viewController.showViewEventDetailsPage(user, selectedEvent.getEvent_id());
 				});
 			}
 		});
@@ -162,6 +184,8 @@ public class ViewEventsPage {
 	    eventLocation.setCellValueFactory(new PropertyValueFactory<>("event_location"));
 
 	    eventTable.getColumns().addAll(eventName, eventDate, eventLocation);
+	    eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+	    
 
 	    if (includeOrganizer) {
 	        TableColumn<Event, String> eventOrganizer = new TableColumn<>("Organizer");

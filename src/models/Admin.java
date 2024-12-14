@@ -37,30 +37,40 @@ public class Admin extends User{
 	}
 	
 	public void viewEventDetails(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan
 	}
 	
 	public void deleteEvent(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan
 	}
 	
-	public void deleteUser(String userID) {
-		
+	public static void deleteUser(String userID) {
+		/*
+		 * ASUMSI:
+		 * 1. dijadikan static karena nama methodnya sama dengan yang ada di parent class (User) sehingga mau tidak mau harus sesuai dengan yang ada di User class
+		 * 2. dikosongkan karena berdasarkan sequence diagram tidak digunakan di Admin class, tapi di User class
+		 */
 	}
 	
-	public void getAllUsers() {
-		
+	/*
+	 * harusnya dikosongkan karena berdasarkan sequence diagram tidak digunakan
+	 * tapi, nama methodnya sama dengan yang ada di parent class (User) sehingga
+	 * mau tidak mau harus sesuai dengan yang ada di User class
+	 */
+	public static ObservableList<User> getAllUsers() {
+		ObservableList<User> userList = null;
+		return userList;
 	}
 	
 	public void getAllEvents() {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan 
 	}
 	
 	public void getGuestsByTransactionID(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan
 	}
 	
 	public void getVendorsByTransactionID(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan
 	}
 }

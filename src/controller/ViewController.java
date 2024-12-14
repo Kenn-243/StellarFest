@@ -3,16 +3,19 @@ package controller;
 import java.util.Stack;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.Event;
 import models.User;
+import views.admin.ViewUsersPage;
 import views.eventOrganizer.AddVendorGuestPage;
 import views.eventOrganizer.CreateEventPage;
+import views.eventOrganizer.EditEventPage;
 import views.guestVendor.ViewInvitationPage;
+import views.user.ChangeProfilePage;
 import views.user.HomePage;
 import views.user.LoginPage;
 import views.user.RegisterPage;
 import views.user.ViewEventDetailsPage;
 import views.user.ViewEventsPage;
+import views.vendor.ManageVendorPage;
 
 public class ViewController {
 	private Stack<Scene> sceneStack;
@@ -33,7 +36,7 @@ public class ViewController {
 		this.primaryStage = stage;
 	}
 	
-	public void back(User user) {
+	public void back() {
 		sceneStack.pop();
 		Scene prevScene = sceneStack.peek();
 		primaryStage.setScene(prevScene);
@@ -69,8 +72,8 @@ public class ViewController {
 		primaryStage.setScene(viewEventsPage);
 	}
 	
-	public void showAddVendorGuestPage(User user, Event event, String addType) {
-		Scene addVendorGuestPage = new AddVendorGuestPage(user, event, addType).getUI();
+	public void showAddVendorGuestPage(User user, String eventId, String addType) {
+		Scene addVendorGuestPage = new AddVendorGuestPage(user, eventId, addType).getUI();
 		sceneStack.push(addVendorGuestPage);
 		primaryStage.setScene(addVendorGuestPage);
 	}
@@ -81,9 +84,38 @@ public class ViewController {
 		primaryStage.setScene(viewInvitationPage);
 	}
 	
-	public void showViewEventDetailsPage(User user, Event event) {
-		Scene viewEventDetailsPage = new ViewEventDetailsPage(user, event).getUI();
+	public void showViewEventDetailsPage(User user, String eventId) {
+		Scene viewEventDetailsPage = new ViewEventDetailsPage(user, eventId).getUI();
 		sceneStack.push(viewEventDetailsPage);
 		primaryStage.setScene(viewEventDetailsPage);
+	}
+	
+	public void showEditEventPage(User user, String eventId) {
+		Scene editEventPage = new EditEventPage(user, eventId).getUI();
+		sceneStack.push(editEventPage);
+		primaryStage.setScene(editEventPage);
+	}
+	
+	public void showViewUsersPage(User user) {
+		Scene viewUsersPage = new ViewUsersPage(user).getUI();
+		sceneStack.push(viewUsersPage);
+		primaryStage.setScene(viewUsersPage);
+	}
+	
+	public void showManageVendorPage(User user) {
+		Scene manageVendorPage = new ManageVendorPage(user).getUI();
+		sceneStack.push(manageVendorPage);
+		primaryStage.setScene(manageVendorPage);
+	}
+	
+	public void showChangeProfilePage(User user) {
+		Scene changeProfilePage = new ChangeProfilePage(user).getUI();
+		sceneStack.push(changeProfilePage);
+		primaryStage.setScene(changeProfilePage);
+	}
+	
+	public void logout() {
+		sceneStack.clear();
+		showLoginPage();
 	}
 }

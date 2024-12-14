@@ -26,8 +26,26 @@ public class Vendor extends User{
 		// dikosongkan karena berdasarkan sequence diagram dilempar ke Event
 	}
 	
-	public void manageVendor(String description, String  product) {
+	/*
+	 * ASUMSI:
+	 * 1. manageVendor = add product
+	 * 2. tambah parameter vendorId supaya bisa punay relation dengan vendor di dalam database
+	 */
+	public static String manageVendor(String description, String  product, String vendorId) {
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "INSERT INTO `product` (vendor_id, product_name, product_description) VALUES (?, ?, ?)";
 		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(vendorId));
+			connection.getPreparedStatement().setString(2, product);
+			connection.getPreparedStatement().setString(3, description);
+			connection.executeUpdate();
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "Success";
 	}
 	
 	public void checkManageVendorInput(String description, String product) {

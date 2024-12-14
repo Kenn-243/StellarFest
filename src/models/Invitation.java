@@ -71,11 +71,12 @@ public class Invitation {
 		ObservableList<Invitation> invitationList = FXCollections.observableArrayList();
 		
 		DatabaseConnection connection = DatabaseConnection.getInstance();
-		String query = "SELECT * FROM `invitation` WHERE user_email = ? AND invitation_status = ?";
+		String query = "SELECT * FROM `invitation` WHERE user_id = ? AND invitation_status = ?";
+		User user = User.getUserByEmail(email);
 		
 		connection.setPreparedStatement(query);
 		try {
-			connection.getPreparedStatement().setString(1, email);
+			connection.getPreparedStatement().setString(1, user.getUser_id());
 			connection.getPreparedStatement().setString(2, "Pending");
 			ResultSet result = connection.executeQuery();
 			while(result.next()) {

@@ -80,34 +80,73 @@ public class EventOrganizerController {
 		}
 	}
 	
-	public void checkAddGuestInput(String vendorID) {
-		
+	/*
+	 * Di Class Diagram pakai method checkAddGuestInput(vendorID), tapi di Sequence Diagram pakai checkAddVendorInput(email)
+	 * ASUMSI:
+	 * 1. ikuti sequence diagram, gunakan checkAddGuestInput(email)
+	 * 2. untuk validasi, asumsikan validasi email benar (diakhiri @gmail.com) + tidak kosong
+	 * 3. return String karena mau return error message
+	 */
+	public String checkAddGuestInput(String email) {
+		if(email.isBlank()) {
+			return "Email is not found";
+		}else if(!email.endsWith("@gmail.com")) {
+			return "Email is invalid";
+		}else {
+			return "Success";
+		}
 	}
 	
-	public void editEventName(String eventID, String eventName) {
-		
+	public String editEventName(String eventID, String eventName) {
+		String response = checkEditEventInput(eventName);
+		if(response.equals("Success")) {
+			return Event.editEventName(eventID, eventName);
+		}else {
+			return response;
+		}
 	}
 	
 	/*
-	 * Di Class Diagram: tidak ada sendInvitation(email) di class ini, tapi di Sequence Diagram ada
 	 * Di Class Diargam, sendInvitation(email) adanya di InvitationController, tapi diarahkan untuk mengikuti sequence diagram
 	 * ASUMSI:
 	 * 1. ikuti sequence diagram, tambahkan sendInvitation(String email)
 	 * 2. method sendInvitation(email) di InvitationController class akan dikosongkan.
 	 * 3. return String karena mau return error message
 	 * 4. parameter event ditambahkan agar bisa mendapat
+	 * 5. parameter target ditambahkan agar function checkAddGuestInput(email) dan checkAddVendorInput(email) bisa terpakai :)
 	 */
-	public String sendInvitation(String email, Event event) {
-		String response = checkAddVendorInput(email);
+	public String sendInvitation(String email, Event event, String target) {
+		String response;
+		if(target.equals("Vendor")) {
+			response = checkAddVendorInput(email);
+		}else if(target.equals("Guest")) {
+			response = checkAddGuestInput(email);
+		}else {
+			response = "Can't invite other than Vendor or Guest";
+		}
+		
 		if(response.equals("Success")) {
 			return Invitation.sendInvitation(email, event);
 		}else {
 			return response;
-		}
+		}	
 	}
 	
 	// ditambahkan buat mendapatkan event organizer berdasarkan ID
 	public EventOrganizer getOrganizerById(String organizerId) {
 		return EventOrganizer.getOrganizerById(organizerId);
+	}
+	
+	/*
+	 * Di Class Diargam tidak checkEditEventInput(eventName) di class manapun, tapi diarahkan untuk mengikuti sequence diagram
+	 * ASUMSI:
+	 * 1. ikuti sequence diagram, tambahkan checkEditEventInput(eventName)
+	 */
+	public String checkEditEventInput(String eventName) {
+		if(eventName.isBlank()) {
+			return "Event name is required";
+		}else {
+			return "Success";
+		}
 	}
 }

@@ -46,7 +46,7 @@ public class Event {
 	}
 	
 	public void viewEventDetails(String eventID) {
-		
+		// dikosongkan karena tidak diperlukan
 	}
 	
 	public static ObservableList<Event> viewOrganizedEvents(String userID) {
@@ -132,6 +132,55 @@ public class Event {
 		
 		return eventList;
 	}
+	
+	/*
+	 * Di Class Diagram tidak ada, tapi di Sequence Diagram untuk editEventName ada
+	 * ASUMSI:
+	 * 1. ditambahkan karena mengikuti sequence diagram
+	 */
+	public static String editEventName(String eventID, String eventName) {
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "UPDATE `event` SET event_name = ? WHERE event_id = ?";
+		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setString(1, eventName);
+			connection.getPreparedStatement().setInt(2, Integer.parseInt(eventID));
+			connection.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return "Success";
+	}
+	
+	/*
+	 * Di Class Diagram tidak ada, tapi di Sequence Diagram untuk deleteEvent ada
+	 * ASUMSI:
+	 * 1. ditambahkan karena mengikuti sequence diagram
+	 */
+	public static void deleteEvent(String eventID) {
+		DatabaseConnection connection = DatabaseConnection.getInstance();
+		String query = "DELETE FROM `invitation` WHERE event_id = ?";
+		
+		connection.setPreparedStatement(query);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			connection.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		String query2 = "DELETE FROM `event` WHERE event_id = ?";
+		connection.setPreparedStatement(query2);
+		try {
+			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			connection.executeUpdate();
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 
 	public String getEvent_id() {
 		return event_id;

@@ -105,12 +105,17 @@ public class UserController {
 	        if (getUserByEmail(email) != null) {
 	            return "Email must be unique";
 	        }
+	        
+	        // maka validasi email berakhir dengan @gmail.com
+	        else if(!email.endsWith("@gmail.com")) {
+	        	return "Email must end with @gmail.com";
+	        }
 	    }
 	    // kalau username tidak kosong dan username tidak sama dengan username saat ini, artinya nama diubah  
 	    if (!name.isBlank() && !name.equals(user.getUser_name())) {
 	    	// maka validasi username belum pernah dipakai
 	        if (getUserByUsername(name) != null) {
-	            return "Username must be unique";
+	            return "Username already exist";
 	        }
 	    }
 	    // kalau newPassword tidak kosong, artinya password mau diubah

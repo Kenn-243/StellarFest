@@ -36,7 +36,7 @@ public class ViewEventsPage {
 	public ViewEventsPage(User loggedInUser) {
 		this.viewController = ViewController.getInstance();
 		this.eventOrganizerController = new EventOrganizerController();
-		this.adminController = new AdminController(); 
+		this.adminController = new AdminController();
 		this.vendorController = new VendorController();
 		this.guestController = new GuestController();
 		this.eventController = new EventController();

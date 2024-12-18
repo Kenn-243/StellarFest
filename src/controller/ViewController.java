@@ -36,6 +36,12 @@ public class ViewController {
 		this.primaryStage = stage;
 	}
 	
+	public void pop(int count) {
+	    for (int i = 0; i < count && !sceneStack.isEmpty(); i++) {
+	    	sceneStack.pop();
+	    }
+	}
+	
 	public void back() {
 		sceneStack.pop();
 		Scene prevScene = sceneStack.peek();

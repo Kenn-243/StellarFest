@@ -100,6 +100,7 @@ public class EditEventPage {
 		updateButton.setOnAction(e -> {
 			String response = eventOrganizerController.editEventName(event.getEvent_id(), nameField.getText());
 			if(response.equals("Success")) {
+				viewController.pop(2);
 				viewController.showViewEventDetailsPage(user, event.getEvent_id());
 			}else {
 				errorLabel.setText(response);

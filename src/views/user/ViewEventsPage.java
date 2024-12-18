@@ -174,7 +174,10 @@ public class ViewEventsPage {
 	}
 	
 	private void setupEventTable(TableView<Event> eventTable, ObservableList<Event> eventList, boolean includeOrganizer) {
-	    TableColumn<Event, String> eventName = new TableColumn<>("Name");
+		TableColumn<Event, String> eventId = new TableColumn<>("Id");
+	    eventId.setCellValueFactory(new PropertyValueFactory<>("event_id"));
+		
+		TableColumn<Event, String> eventName = new TableColumn<>("Name");
 	    eventName.setCellValueFactory(new PropertyValueFactory<>("event_name"));
 
 	    TableColumn<Event, String> eventDate = new TableColumn<>("Date");
@@ -183,7 +186,7 @@ public class ViewEventsPage {
 	    TableColumn<Event, String> eventLocation = new TableColumn<>("Location");
 	    eventLocation.setCellValueFactory(new PropertyValueFactory<>("event_location"));
 
-	    eventTable.getColumns().addAll(eventName, eventDate, eventLocation);
+	    eventTable.getColumns().addAll(eventId, eventName, eventDate, eventLocation);
 	    eventTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	    
 

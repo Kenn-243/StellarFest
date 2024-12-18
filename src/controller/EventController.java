@@ -30,8 +30,8 @@ public class EventController {
 			return "Date must be in the future";
 		}
 		// validasi location tidak boleh kosong
-		else if(location.isBlank()) {
-			return "Location is required";
+		else if(location.length() < 5) {
+			return "Minimum length 5 characters";
 		}
 		// validasi description tidak boleh kosong
 		else if(description.isBlank()) {

@@ -116,7 +116,7 @@ public class AddVendorGuestPage {
 	}
 	
 	private void addGuest(VBox addGuestContainer, Label titleLabel, Button inviteGuestsButton, HBox errorPane, Label errorLabel, String addType) {
-		titleLabel.setText("Add Vendor");
+		titleLabel.setText("Add Guest");
 		
 		inviteGuestsButton.setText("Invite Guest(s)");
 

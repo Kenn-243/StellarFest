@@ -12,13 +12,16 @@ public class InvitationController {
 		 * 1. ikuti sequence diagram, tambahkan sendInvitation(String email) (diarahkan untuk mengikuti sequence diagram)
 		 * 2. method sendInvitation(email) di InvitationController class akan dikosongkan.
 		 */
+		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan atau dipanggil sama sekali
 	}
 	
 	public void acceptInvitation(String eventID) {
-		
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan atau dipanggil sama sekali
 	}
 	
 	public ObservableList<Invitation> getInvitations(String email) {
+		// panggil method getInvitations dari Invitation class
 		return Invitation.getInvitations(email);
 	}
 }

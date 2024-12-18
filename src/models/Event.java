@@ -25,9 +25,11 @@ public class Event {
 		this.event_description = event_description;
 		this.organizer_id = organizer_id;
 	}
-
+	
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static String createEvent(String eventName, Date date, String location, String description, String organizerID) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk menginsert event ke dalam database
 		String query = "INSERT INTO `event` (event_name, event_date, event_location, event_description, organizer_id) VALUES (?, ?, ?, ?, ?);";
 		
 		connection.setPreparedStatement(query);
@@ -37,28 +39,34 @@ public class Event {
 			connection.getPreparedStatement().setString(3, location);
 			connection.getPreparedStatement().setString(4, description);
 			connection.getPreparedStatement().setInt(5, Integer.parseInt(organizerID));
+			// gunakan executeUpdate supaya query tersebut diexecute tanpa return apapun, hanya update isi database aja
 			connection.executeUpdate();
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
-		
+		// kalau berhasil diinsert, maka return Success
 		return "Success";
 	}
 	
 	public void viewEventDetails(String eventID) {
-		// dikosongkan karena tidak diperlukan
+		// dikosongkan karena berdasarkan sequence diagram tidak digunakan atau dipanggil sama sekali
 	}
 	
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static ObservableList<Event> viewOrganizedEvents(String userID) {
+		// inisialisasi eventList yang akan menampung semua event yang dibuat oleh organizer berdasarkan user id
         ObservableList<Event> eventList = FXCollections.observableArrayList();
 
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk mengambil semua event berdasarkan organizer id
 		String query = "SELECT * FROM `event` WHERE organizer_id = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(userID));
+			// gunakan executeQuery dan tampung ke dalam variable ResultSet result
 			ResultSet result = connection.executeQuery();
+			// selagi result masih ada isi, maka isinya dimasukkan ke eventList
 			while(result.next()) {
 				String event_id = String.valueOf(result.getInt("event_id"));
 				String event_name = result.getString("event_name");
@@ -71,19 +79,25 @@ public class Event {
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
+		// return eventList yang sudah ada isi
 		return eventList;
 	}
 	
 	// ditambahkan buat mendapatkan event berdasarkan id;
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static Event getEventById(String eventID) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk mengambil event berdasarkan event id
 		String query = "SELECT * FROM `event` WHERE event_id = ?";
 		Event event = null;
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			// gunakan executeQuery dan tampung ke dalam variable ResultSet result
 			ResultSet result = connection.executeQuery();
+			// result hanya akan memiliki 1 isi karena query berdasarkan id
+			// hasilnya akan ditampung ke dalam object event
 			while(result.next()) {
 				String event_id = String.valueOf(result.getInt("event_id"));
 				String event_name = result.getString("event_name");
@@ -96,7 +110,7 @@ public class Event {
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		// return event yang didapatkan dari database
 		return event;
 	}
 	
@@ -106,17 +120,24 @@ public class Event {
 	 * 1. return type-nya menggunakan ObservableList karena di class diagram tidak di-specify
 	 * 2. diarahkan untuk mengikuti sequence diagram
 	 */
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static ObservableList<Event> viewAcceptedEvents(String email) {
+		// inisialisasi eventList yang akan menampung semua event yang diaccept oleh user, baik guest atau vendor
 		ObservableList<Event> eventList = FXCollections.observableArrayList();
+		
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk mengambil event yang diaccept oleh user, baik guest atau vendor
 		String query = "SELECT * FROM `event` AS e JOIN `invitation` AS i ON e.event_id = i.event_id WHERE i.user_id = ? AND i.invitation_status = ?";
+		// mendapatkan object user berdasarkan email
 		User user = User.getUserByEmail(email);
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(user.getUser_id()));
 			connection.getPreparedStatement().setString(2, "Accepted");
+			// gunakan executeQuery dan tampung ke dalam variable ResultSet result
 			ResultSet result = connection.executeQuery();
+			// selagi result masih ada isi, maka isinya akan ditambahkan ke dalam eventList
 			while(result.next()) {
 				String event_id = String.valueOf(result.getInt("event_id"));
 				String event_name = result.getString("event_name");
@@ -129,7 +150,7 @@ public class Event {
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		// return eventList yang sudah ada isi
 		return eventList;
 	}
 	
@@ -138,19 +159,22 @@ public class Event {
 	 * ASUMSI:
 	 * 1. ditambahkan karena mengikuti sequence diagram
 	 */
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static String editEventName(String eventID, String eventName) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk update event_name di dalam table event di database
 		String query = "UPDATE `event` SET event_name = ? WHERE event_id = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setString(1, eventName);
 			connection.getPreparedStatement().setInt(2, Integer.parseInt(eventID));
+			// gunakan executeUpdate supaya query tersebut diexecute tanpa return apapun, hanya update isi database aja
 			connection.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+		// kalau berhasil diupdate, maka return Success
 		return "Success";
 	}
 	
@@ -159,28 +183,33 @@ public class Event {
 	 * ASUMSI:
 	 * 1. ditambahkan karena mengikuti sequence diagram
 	 */
+	// dijadikan static supaya bisa dipanggil tanpa perlu bikin object Event
 	public static void deleteEvent(String eventID) {
 		DatabaseConnection connection = DatabaseConnection.getInstance();
+		// query untuk delete invitation berdasarkan event_id (supaya datanya tetap konsisten)
+		// karena tidak ditambahkan ON DELETE Cascade
 		String query = "DELETE FROM `invitation` WHERE event_id = ?";
 		
 		connection.setPreparedStatement(query);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			// gunakan executeUpdate supaya query tersebut diexecute tanpa return apapun, hanya update isi database aja
 			connection.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		// query untuk delete event berdasarkan event_id
 		String query2 = "DELETE FROM `event` WHERE event_id = ?";
 		connection.setPreparedStatement(query2);
 		try {
 			connection.getPreparedStatement().setInt(1, Integer.parseInt(eventID));
+			// gunakan executeUpdate supaya query tersebut diexecute tanpa return apapun, hanya update isi database aja
 			connection.executeUpdate();
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 
 	public String getEvent_id() {
 		return event_id;
